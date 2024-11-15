@@ -1,11 +1,9 @@
 package com.Charan.ProductServiceEcom.Controllers;
 
 import com.Charan.ProductServiceEcom.Exceptions.ProductNotFoundException;
-import com.Charan.ProductServiceEcom.Models__FakeStoreProductService.Product;
+import com.Charan.ProductServiceEcom.Models.Product;
 import com.Charan.ProductServiceEcom.Services.ProductService;
 import com.Charan.ProductServiceEcom.dtos.CreateProductRequestDto;
-import com.Charan.ProductServiceEcom.dtos.ExceptionDto;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

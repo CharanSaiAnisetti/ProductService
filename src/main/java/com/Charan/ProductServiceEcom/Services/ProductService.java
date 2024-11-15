@@ -1,7 +1,7 @@
 package com.Charan.ProductServiceEcom.Services;
 
 import com.Charan.ProductServiceEcom.Exceptions.ProductNotFoundException;
-import com.Charan.ProductServiceEcom.Models__FakeStoreProductService.Product;
+import com.Charan.ProductServiceEcom.Models.Product;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;

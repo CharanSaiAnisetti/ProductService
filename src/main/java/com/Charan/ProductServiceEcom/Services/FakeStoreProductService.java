@@ -1,8 +1,8 @@
 package com.Charan.ProductServiceEcom.Services;
 
 import com.Charan.ProductServiceEcom.Exceptions.ProductNotFoundException;
-import com.Charan.ProductServiceEcom.Models__FakeStoreProductService.Category;
-import com.Charan.ProductServiceEcom.Models__FakeStoreProductService.Product;
+import com.Charan.ProductServiceEcom.Models.Category;
+import com.Charan.ProductServiceEcom.Models.Product;
 import com.Charan.ProductServiceEcom.dtos.FakeStoreProductDto;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
