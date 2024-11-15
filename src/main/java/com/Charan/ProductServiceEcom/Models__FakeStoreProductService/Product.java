@@ -1,4 +1,4 @@
-package com.Charan.ProductServiceEcom.Models;
+package com.Charan.ProductServiceEcom.Models__FakeStoreProductService;
 
 
 import lombok.Getter;

@@ -1,9 +1,12 @@
 package com.Charan.ProductServiceEcom.Controllers;
 
-import com.Charan.ProductServiceEcom.Models.Category;
-import com.Charan.ProductServiceEcom.Models.Product;
+import com.Charan.ProductServiceEcom.Exceptions.ProductNotFoundException;
+import com.Charan.ProductServiceEcom.Models__FakeStoreProductService.Product;
 import com.Charan.ProductServiceEcom.Services.ProductService;
 import com.Charan.ProductServiceEcom.dtos.CreateProductRequestDto;
+import com.Charan.ProductServiceEcom.dtos.ExceptionDto;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,7 +23,7 @@ public class ProductController {
 
 
     @GetMapping("/{id}")
-    public Product getProductById(@PathVariable("id") Long id) {
+    public ResponseEntity<Product> getProductById(@PathVariable("id") Long id) throws ProductNotFoundException {
         return productService.getSingleProduct(id);
     }
 
@@ -30,10 +33,11 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteProduct(Long id){
-
+    public Product deleteProduct(@PathVariable("id") Long id) throws ProductNotFoundException {
+       return productService.deleteProduct(id);
     }
 
+    //update API of FakeStore is not working
     @PatchMapping("/{id}")
     public Product updateProduct(@PathVariable("id") Long productId, @RequestBody Product product){
 
@@ -54,6 +58,21 @@ public class ProductController {
     public List<String> getAllCategories(){
         return productService.getAllCategories();
     }
+
+    @GetMapping("/categories/{category}")
+    public List<Product> getProductsByCategory(@PathVariable("category") String category){
+        return productService.getProductsByCategory(category);
+    }
+
+//    @ExceptionHandler(ProductNotFoundException.class)
+//    public ResponseEntity<ExceptionDto> handleProductNotFoundException () {
+//
+//        ExceptionDto exceptionDto = new ExceptionDto();
+//        exceptionDto.setErrorMessage("Product with the given id is not found ");
+//        exceptionDto.setResolution("Please try a different id");
+//        ResponseEntity<ExceptionDto> response= new ResponseEntity<>( exceptionDto, HttpStatus.NOT_FOUND);
+//        return response;
+//    }
 
 }
 
