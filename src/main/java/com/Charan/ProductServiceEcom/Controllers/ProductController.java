@@ -1,9 +1,11 @@
 package com.Charan.ProductServiceEcom.Controllers;
 
+import com.Charan.ProductServiceEcom.Exceptions.CategoryNotFoundException;
 import com.Charan.ProductServiceEcom.Exceptions.ProductNotFoundException;
 import com.Charan.ProductServiceEcom.Models.Product;
 import com.Charan.ProductServiceEcom.Services.ProductService;
 import com.Charan.ProductServiceEcom.dtos.CreateProductRequestDto;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +17,7 @@ public class ProductController {
 
     private ProductService productService;
 
-    public ProductController(ProductService productService) {
+    public ProductController(@Qualifier("OwnDBProductService") ProductService productService) {
         this.productService = productService;
     }
 
@@ -37,19 +39,19 @@ public class ProductController {
 
     //update API of FakeStore is not working
     @PatchMapping("/{id}")
-    public Product updateProduct(@PathVariable("id") Long productId, @RequestBody Product product){
+    public Product updateProduct(@PathVariable("id") Long productId, @RequestBody Product product) throws ProductNotFoundException {
 
         return productService.updateProduct(productId, product);
     }
 
     @PutMapping("/{id}")
-    public Product replaceProduct(@PathVariable("id") Long productId ,@RequestBody Product product){
+    public Product replaceProduct(@PathVariable("id") Long productId ,@RequestBody Product product) throws ProductNotFoundException, CategoryNotFoundException {
         return productService.replaceProduct(productId, product);
     }
 
     @PostMapping()
     public Product createProduct(@RequestBody CreateProductRequestDto requestDto){
-        return productService.createProduct(requestDto.getTitle(),requestDto.getPrice(),requestDto.getDescription(),requestDto.getImage(),requestDto.getCategory());
+        return productService.createProduct(requestDto.getTitle(),requestDto.getPrice(),requestDto.getDescription(),requestDto.getCategory());
     }
 
     @GetMapping("/categories")

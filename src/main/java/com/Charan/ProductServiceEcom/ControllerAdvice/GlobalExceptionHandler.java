@@ -1,5 +1,6 @@
 package com.Charan.ProductServiceEcom.ControllerAdvice;
 
+import com.Charan.ProductServiceEcom.Exceptions.CategoryNotFoundException;
 import com.Charan.ProductServiceEcom.Exceptions.ProductNotFoundException;
 import com.Charan.ProductServiceEcom.dtos.ExceptionDto;
 import jakarta.servlet.http.HttpServletRequest;
@@ -36,7 +37,16 @@ public class GlobalExceptionHandler {
         ExceptionDto exceptionDto = new ExceptionDto();
         exceptionDto.setErrorMessage(exception.getMessage());
         exceptionDto.setResolution(exception.getResolution());
-        ResponseEntity<ExceptionDto> response= new ResponseEntity<>( exceptionDto, HttpStatus.NOT_FOUND);
-        return response;
+
+        return new ResponseEntity<>( exceptionDto, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(CategoryNotFoundException.class)
+    public ResponseEntity<ExceptionDto> handleCategoryNotFoundException (CategoryNotFoundException exception) {
+        ExceptionDto exceptionDto = new ExceptionDto();
+        exceptionDto.setErrorMessage(exception.getMessage());
+        exceptionDto.setResolution(exceptionDto.getResolution());
+
+        return new ResponseEntity<>( exceptionDto, HttpStatus.NOT_FOUND);
     }
 }

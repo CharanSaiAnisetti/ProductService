@@ -1,5 +1,6 @@
 package com.Charan.ProductServiceEcom.Services;
 
+import com.Charan.ProductServiceEcom.Exceptions.CategoryNotFoundException;
 import com.Charan.ProductServiceEcom.Exceptions.ProductNotFoundException;
 import com.Charan.ProductServiceEcom.Models.Product;
 import org.springframework.http.ResponseEntity;
@@ -14,12 +15,12 @@ public interface ProductService {
 
     public Product deleteProduct(Long id) throws ProductNotFoundException;
 
-    public Product updateProduct(Long productId, Product product);
+    public Product updateProduct(Long productId, Product product) throws ProductNotFoundException;
 
-    Product replaceProduct(Long productId, Product product);
+    Product replaceProduct(Long productId, Product product) throws ProductNotFoundException, CategoryNotFoundException;
 
 
-    Product createProduct(String title, Double price, String description, String image, String category);
+    Product createProduct(String title, double price, String description, String category);
 
     List<String> getAllCategories();
 
