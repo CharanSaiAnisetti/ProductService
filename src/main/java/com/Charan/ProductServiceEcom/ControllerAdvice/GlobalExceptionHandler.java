@@ -45,7 +45,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ExceptionDto> handleCategoryNotFoundException (CategoryNotFoundException exception) {
         ExceptionDto exceptionDto = new ExceptionDto();
         exceptionDto.setErrorMessage(exception.getMessage());
-        exceptionDto.setResolution(exceptionDto.getResolution());
+        exceptionDto.setResolution(exception.getResolution());
 
         return new ResponseEntity<>( exceptionDto, HttpStatus.NOT_FOUND);
     }

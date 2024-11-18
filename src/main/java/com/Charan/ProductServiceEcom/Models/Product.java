@@ -1,6 +1,8 @@
 package com.Charan.ProductServiceEcom.Models;
 
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
@@ -12,6 +14,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 @Entity
+@JsonPropertyOrder({"id", "title", "price", "description", "createdAt", "updatedAt","category"}) // Defining the desired order of output response
 public class Product extends BaseModel implements Serializable {
 
 

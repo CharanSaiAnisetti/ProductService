@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.swing.text.html.Option;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -91,6 +92,7 @@ public class OwnDBProductService implements ProductService {
 
     @Override
     public Product replaceProduct(Long productId, Product product) throws ProductNotFoundException, CategoryNotFoundException {
+
         Optional<Product> productOptional = productRepository.findById(productId);
 
         Product createdProduct;
@@ -124,9 +126,10 @@ public class OwnDBProductService implements ProductService {
                 newCategory.setName(product.getCategory().getName());
                 product.setCategory(newCategory);
             }
-        }else{
-            throw new CategoryNotFoundException("Category is not found in the passed parameters " ,"Please enter the category to proceed");
+        }else{ // if parameters doesnt have category object
+            throw new CategoryNotFoundException("Catefory is not found in the passed parameters","plaese send the category object");
         }
+
 
         return productRepository.save(createdProduct);
     }
@@ -154,12 +157,17 @@ public class OwnDBProductService implements ProductService {
 
     @Override
     public List<String> getAllCategories() {
-        return List.of();
+       List<Category> allCategories = categoryRepository.findAll();
+       List<String> categories = new ArrayList<>();
+       for(Category category:allCategories){
+           categories.add(category.getName());
+       }
+        return categories;
     }
 
     @Override
     public List<Product> getProductsByCategory(String category) {
-        return List.of();
+        return productRepository.findAllByCategoryName(category);
     }
 
 
