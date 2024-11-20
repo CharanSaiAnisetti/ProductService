@@ -4,6 +4,7 @@ import com.Charan.ProductServiceEcom.Exceptions.ProductNotFoundException;
 import com.Charan.ProductServiceEcom.Models.Category;
 import com.Charan.ProductServiceEcom.Models.Product;
 import com.Charan.ProductServiceEcom.dtos.FakeStoreProductDto;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,12 +23,23 @@ public class FakeStoreProductService implements ProductService{
 
     RestTemplate restTemplate;
 
-    public FakeStoreProductService(RestTemplate restTemplate) {
+    RedisTemplate<String,Object> redisTemplate;
+
+    public FakeStoreProductService(RestTemplate restTemplate,RedisTemplate<String,Object> redisTemplate) {
         this.restTemplate = restTemplate;
+        this.redisTemplate = redisTemplate;
     }
+
 
     @Override
     public ResponseEntity<Product> getSingleProduct(Long productId) throws ProductNotFoundException {
+
+        Product cacheProduct = (Product) redisTemplate.opsForHash().get("PRODUCTS","PRODUCT_"+productId);
+
+        //cache hit
+        if(cacheProduct != null) {
+            return new ResponseEntity<>(cacheProduct, HttpStatus.OK);
+        }
 
        FakeStoreProductDto fakeStoreProductDto = restTemplate.getForObject(
                "https://fakestoreapi.com/products/"+ productId,//url of the third party
@@ -41,7 +53,8 @@ public class FakeStoreProductService implements ProductService{
 
        Product product = convertFakeStoreProductDtoToProduct(fakeStoreProductDto);
 
-
+        //if cache miss store the product in the cache
+        redisTemplate.opsForHash().put("PRODUCTS","PRODUCT_"+productId,product);
 
        ResponseEntity<Product> response = new ResponseEntity<>(product, HttpStatus.OK);
 

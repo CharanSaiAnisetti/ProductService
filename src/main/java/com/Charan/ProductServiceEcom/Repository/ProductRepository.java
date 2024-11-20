@@ -3,6 +3,7 @@ package com.Charan.ProductServiceEcom.Repository;
 import com.Charan.ProductServiceEcom.Models.Product;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
@@ -12,6 +13,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
 
     @Override
+    @Query(value = "select id,title from product",nativeQuery = true)
     List<Product> findAll(Sort sort);
 
     Product deleteById(long id);
