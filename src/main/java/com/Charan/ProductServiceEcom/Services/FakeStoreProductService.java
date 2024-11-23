@@ -4,11 +4,16 @@ import com.Charan.ProductServiceEcom.Exceptions.ProductNotFoundException;
 import com.Charan.ProductServiceEcom.Models.Category;
 import com.Charan.ProductServiceEcom.Models.Product;
 import com.Charan.ProductServiceEcom.dtos.FakeStoreProductDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.HttpMessageConverterExtractor;
 import org.springframework.web.client.RequestCallback;
 import org.springframework.web.client.ResponseExtractor;
@@ -156,6 +161,31 @@ public class FakeStoreProductService implements ProductService{
             products.add(convertFakeStoreProductDtoToProduct(fakeStoreProductDtos));
         }
         return products;
+    }
+
+    @Override
+    public Page<Product> getAllProducts(int pageNumber, int pageSize, @RequestParam(required = false) String sortBy) throws ProductNotFoundException {
+
+        FakeStoreProductDto[] fakeStoreProductsDto = restTemplate.getForObject("https://fakestoreapi.com/products",
+                                                                                    FakeStoreProductDto[].class);
+
+        List<Product> products = new ArrayList<>();
+        for(FakeStoreProductDto fakeStoreProductDtos : fakeStoreProductsDto){
+            products.add(convertFakeStoreProductDtoToProduct(fakeStoreProductDtos));
+        }
+
+        int totalProducts = products.size();
+        int start = pageNumber * pageSize;
+        int end = Math.min(start + pageSize, totalProducts);
+
+        // Validate page range
+        if (start >= totalProducts ) {
+            return new PageImpl<>(Collections.emptyList());
+        }
+
+        List<Product> pagedProducts = products.subList(start, end);
+
+        return new PageImpl<>(pagedProducts);
     }
 
 

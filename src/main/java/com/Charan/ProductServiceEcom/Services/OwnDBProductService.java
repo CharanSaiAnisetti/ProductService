@@ -6,6 +6,10 @@ import com.Charan.ProductServiceEcom.Models.Category;
 import com.Charan.ProductServiceEcom.Models.Product;
 import com.Charan.ProductServiceEcom.Repository.CategoryRepository;
 import com.Charan.ProductServiceEcom.Repository.ProductRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -168,6 +172,11 @@ public class OwnDBProductService implements ProductService {
     @Override
     public List<Product> getProductsByCategory(String category) {
         return productRepository.findAllByCategoryName(category);
+    }
+
+    @Override
+    public Page<Product> getAllProducts(int pageNumber, int pageSize , String sortBy) {
+        return productRepository.findAll(PageRequest.of(pageNumber, pageSize,Sort.by(sortBy)));
     }
 
 

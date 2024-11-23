@@ -8,6 +8,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.elasticsearch.annotations.Document;
 
 import java.io.Serializable;
 

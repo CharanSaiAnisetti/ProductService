@@ -3,6 +3,8 @@ package com.Charan.ProductServiceEcom.Services;
 import com.Charan.ProductServiceEcom.Exceptions.CategoryNotFoundException;
 import com.Charan.ProductServiceEcom.Exceptions.ProductNotFoundException;
 import com.Charan.ProductServiceEcom.Models.Product;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -25,4 +27,7 @@ public interface ProductService {
     List<String> getAllCategories();
 
     List<Product> getProductsByCategory(String category);
+
+    Page<Product> getAllProducts(int pageNumber, int pageSize,String sortBy) throws ProductNotFoundException;
+
 }

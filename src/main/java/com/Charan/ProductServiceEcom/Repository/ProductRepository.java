@@ -1,6 +1,8 @@
 package com.Charan.ProductServiceEcom.Repository;
 
 import com.Charan.ProductServiceEcom.Models.Product;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -21,4 +23,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     Product save(Product product);
 
     List<Product> findAllByCategoryName(String category);
+
+    Page<Product> findAll(Pageable pageable);
+
 }

@@ -6,6 +6,7 @@ import com.Charan.ProductServiceEcom.Models.Product;
 import com.Charan.ProductServiceEcom.Services.ProductService;
 import com.Charan.ProductServiceEcom.dtos.CreateProductRequestDto;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +18,7 @@ public class ProductController {
 
     private ProductService productService;
 
-    public ProductController(@Qualifier("FakeStoreProductService") ProductService productService) {
+    public ProductController(@Qualifier("OwnDBProductService") ProductService productService) {
         this.productService = productService;
     }
 
@@ -62,6 +63,14 @@ public class ProductController {
     @GetMapping("/categories/{category}")
     public List<Product> getProductsByCategory(@PathVariable("category") String category){
         return productService.getProductsByCategory(category);
+    }
+
+    @GetMapping("/page")
+    public Page<Product> getProductsByPage(@RequestParam(defaultValue = "0") int pageNumber,
+                                           @RequestParam(defaultValue = "5") int pageSize,
+                                           @RequestParam(required = false,defaultValue = "id") String sortBy,
+                                           @RequestParam(required = false,defaultValue = "asc") String sortOrder) throws ProductNotFoundException {
+        return productService.getAllProducts(pageNumber, pageSize, sortBy);
     }
 
 //    @ExceptionHandler(ProductNotFoundException.class)

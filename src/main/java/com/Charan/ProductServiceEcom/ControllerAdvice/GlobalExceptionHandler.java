@@ -25,7 +25,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(NullPointerException.class)
     public ResponseEntity<String> handleNullPointerException () {
-        ResponseEntity<String> response = new ResponseEntity<>("Please enter a number which is in the valid rage 1 - 100",
+        ResponseEntity<String> response = new ResponseEntity<>("Please enter a number which is in the valid rage ",
                                                             HttpStatus.BAD_REQUEST);
 
         return response;
