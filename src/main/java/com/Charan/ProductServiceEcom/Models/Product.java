@@ -16,6 +16,7 @@ import java.io.Serializable;
 @Setter
 @Entity
 @JsonPropertyOrder({"id", "title", "price", "description", "createdAt", "updatedAt","category"}) // Defining the desired order of output response
+@Document(indexName = "products")
 public class Product extends BaseModel implements Serializable {
 
 
