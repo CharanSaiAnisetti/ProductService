@@ -6,15 +6,19 @@ import com.Charan.ProductServiceEcom.Models.Category;
 import com.Charan.ProductServiceEcom.Models.Product;
 import com.Charan.ProductServiceEcom.Repository.CategoryRepository;
 import com.Charan.ProductServiceEcom.Repository.ProductRepository;
+import com.Charan.ProductServiceEcom.dtos.SendEmailEventDto;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -22,13 +26,22 @@ import java.util.Optional;
 @Service("OwnDBProductService")
 public class OwnDBProductService implements ProductService {
 
-    private ProductRepository productRepository;
+    private  ProductRepository productRepository;
 
-    private CategoryRepository categoryRepository;
+    private  CategoryRepository categoryRepository;
 
-    public OwnDBProductService(ProductRepository productRepository, CategoryRepository categoryRepository) {
+    private  KafkaTemplate<String, String> kafkaTemplate;
+
+    private ObjectMapper objectMapper;
+
+    public OwnDBProductService(ProductRepository productRepository,
+                               CategoryRepository categoryRepository,
+                               KafkaTemplate kafkaTemplate,
+                               ObjectMapper objectMapper) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
+        this.kafkaTemplate = kafkaTemplate;
+        this.objectMapper = objectMapper;
     }
 
     @Override
@@ -63,6 +76,7 @@ public class OwnDBProductService implements ProductService {
         Product product = productOptional.get();
 
         productRepository.deleteById(id);
+
 
         return product;
     }
@@ -177,6 +191,38 @@ public class OwnDBProductService implements ProductService {
     @Override
     public Page<Product> getAllProducts(int pageNumber, int pageSize , String sortBy) {
         return productRepository.findAll(PageRequest.of(pageNumber, pageSize,Sort.by(sortBy)));
+    }
+
+    @Override
+    public Product emailDeletedProduct(Long id, SendEmailEventDto eventDto) throws ProductNotFoundException {
+        Optional<Product> productOptional = productRepository.findById(id);
+
+        if (productOptional.isEmpty()) {
+            throw new ProductNotFoundException("Product with the given id " + id + "is not found" , "Please enter a valid id");
+        }
+
+        Product product = productOptional.get();
+
+        productRepository.deleteById(id);
+
+        //sending email after deleting the product
+
+        SendEmailEventDto emailEventDto = new SendEmailEventDto();
+            emailEventDto.setTo(eventDto.getTo());
+            emailEventDto.setFrom("charansaianisetti3@@gmail.com");
+            emailEventDto.setSubject("Welcome to John Wick Ecommerce");
+            emailEventDto.setBody("Hi Bhargaviii,Happy to have you on board. Explore-Experience and Experiment. Have a nice day!");
+
+            try {
+                kafkaTemplate.send(
+                        "sendEmail",
+                        objectMapper.writeValueAsString(emailEventDto)
+                );
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+
+        return product;
     }
 
 

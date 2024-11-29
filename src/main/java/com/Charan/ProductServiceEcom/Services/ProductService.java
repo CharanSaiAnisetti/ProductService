@@ -3,6 +3,7 @@ package com.Charan.ProductServiceEcom.Services;
 import com.Charan.ProductServiceEcom.Exceptions.CategoryNotFoundException;
 import com.Charan.ProductServiceEcom.Exceptions.ProductNotFoundException;
 import com.Charan.ProductServiceEcom.Models.Product;
+import com.Charan.ProductServiceEcom.dtos.SendEmailEventDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -30,4 +31,5 @@ public interface ProductService {
 
     Page<Product> getAllProducts(int pageNumber, int pageSize,String sortBy) throws ProductNotFoundException;
 
+    Product emailDeletedProduct(Long id, SendEmailEventDto emailEventDto) throws ProductNotFoundException;
 }

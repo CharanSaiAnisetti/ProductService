@@ -5,6 +5,7 @@ import com.Charan.ProductServiceEcom.Exceptions.ProductNotFoundException;
 import com.Charan.ProductServiceEcom.Models.Product;
 import com.Charan.ProductServiceEcom.Services.ProductService;
 import com.Charan.ProductServiceEcom.dtos.CreateProductRequestDto;
+import com.Charan.ProductServiceEcom.dtos.SendEmailEventDto;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -71,6 +72,13 @@ public class ProductController {
                                            @RequestParam(required = false,defaultValue = "id") String sortBy,
                                            @RequestParam(required = false,defaultValue = "asc") String sortOrder) throws ProductNotFoundException {
         return productService.getAllProducts(pageNumber, pageSize, sortBy);
+    }
+
+    @DeleteMapping("/email/{id}")
+    public Product getProductByEmail(@PathVariable("id") Long id ,
+                                     @RequestBody SendEmailEventDto emailEventDto) throws ProductNotFoundException {
+
+        return productService.emailDeletedProduct(id ,emailEventDto);
     }
 
 //    @ExceptionHandler(ProductNotFoundException.class)

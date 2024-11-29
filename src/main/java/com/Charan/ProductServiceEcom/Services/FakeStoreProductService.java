@@ -4,6 +4,7 @@ import com.Charan.ProductServiceEcom.Exceptions.ProductNotFoundException;
 import com.Charan.ProductServiceEcom.Models.Category;
 import com.Charan.ProductServiceEcom.Models.Product;
 import com.Charan.ProductServiceEcom.dtos.FakeStoreProductDto;
+import com.Charan.ProductServiceEcom.dtos.SendEmailEventDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -186,6 +187,11 @@ public class FakeStoreProductService implements ProductService{
         List<Product> pagedProducts = products.subList(start, end);
 
         return new PageImpl<>(pagedProducts);
+    }
+
+    @Override
+    public Product emailDeletedProduct(Long id, SendEmailEventDto emailEventDto) throws ProductNotFoundException {
+        return null;
     }
 
 
